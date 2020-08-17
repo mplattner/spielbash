@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (C) 2016 Red Hat
 #
@@ -44,7 +44,7 @@ def is_process_running_in_tmux(session):
     cmd = 'tmux list-panes -F #{pane_pid} -t %s' % session
     father = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
-    father = father.stdout.readlines()[0].strip('\n')
+    father = father.stdout.readlines()[0].strip(b'\n')
     # then we just check whether this process still has children:
     cmd = 'pgrep -P %s' % father
     child = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE,
@@ -229,6 +229,11 @@ def strip_logout(lines):
 
 
 def main():
+    global READING_TIME
+    global TYPING_SPEED
+    global WIDTH
+    global HEIGHT
+
     parser = argparse.ArgumentParser(description="spielbash CLI")
     parser.add_argument('--speed', metavar='Typing speed',
                         help='Typing speed', type=float, default=TYPING_SPEED,
@@ -252,10 +257,6 @@ def main():
     script_file = args.script
     output_file = args.output
 
-    global READING_TIME
-    global TYPING_SPEED
-    global WIDTH
-    global HEIGHT
     READING_TIME = args.readtime
     TYPING_SPEED = args.speed
     WIDTH = args.width
